@@ -241,7 +241,7 @@ def plot_truss(truss, FOS, F, Load):
         else:
             lst = '-'
         Hm.append(plot([p1[0], p2[0]], [p1[1], p2[1]], color, linewidth=truss["Sizes"][i]+1, linestyle = lst))
-        axis('equal')
+        axis([-1,11,-1,11])
         
     # Plot supports
     Hs = []
@@ -267,8 +267,8 @@ def plot_truss(truss, FOS, F, Load):
     
 def main():
     
-    pop = toolbox.population(n=250)
-    CXPB, MUTPB, NGEN = 0.0, 1.0, 900
+    pop = toolbox.population(n=300)
+    CXPB, MUTPB, NGEN = 0.0, 1.0, 1000
     
     history = []
     stats = []
@@ -316,6 +316,9 @@ def main():
         # Keep track of best individual
         if history is not None:
             history.append(max(pop, key=attrgetter("fitness")))
+        plot_truss(history[g][0], history[g][0]["FOS"], history[g][0]["F"], Pre["Load"])
+        savefig("data/"+str(g)+".png")
+        clf()
         
         # The population is entirely replaced by the offspring
         pop[:] = toolbox.select(pop, int(len(pop)*0.1)) + toolbox.select(offspring, int(len(pop)*0.9))
@@ -337,13 +340,12 @@ def main():
     
     print("-- End of (successful) evolution --")
     
-    #best_ind = tools.selBest(pop, 1)[0]
-    #print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
-    
+    """
     for i in range(len(history)):
         plot_truss(history[i][0], history[i][0]["FOS"], history[i][0]["F"], Pre["Load"])
         savefig("data/"+str(i)+".png")
         clf()
+    """
     
     stats_np = np.array(stats)
     plot(range(1, len(stats)+1), stats_np[:,2], label="mean")
