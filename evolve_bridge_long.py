@@ -196,7 +196,7 @@ def fos_eval(truss):
             fail_flag = 1
     
     for i in range(len(weights)):
-        weights[i] = weights[i] * np.linalg.norm(temp["Beams"][:,i])
+        weights[i] = weights[i] * L[i]
     
     temp["FOS"] = FOS
     temp["F"] = F
